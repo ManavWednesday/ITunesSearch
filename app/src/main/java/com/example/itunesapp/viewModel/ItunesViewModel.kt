@@ -5,6 +5,7 @@ import android.content.Context
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.itunesapp.database.DatabaseImpl
 import com.example.itunesapp.model.ResultDatabase
 import com.example.itunesapp.network.ApiInstance
@@ -22,14 +23,17 @@ class ItunesViewModel(application: Application) : AndroidViewModel(application) 
     val resultMappingImpl = ResultMappingImpl()
 
 
-    fun searchItem(){
+    fun searchItem():Int{
 
-        GlobalScope.launch {
+        var count = 0
+
+       viewModelScope.launch {
             val result = searchItunesApi.searchSongs("#search")
             if (result != null){
                 var searchItem = result.body()
                 if (searchItem != null) {
 
+                    count = searchItem.resultCount
                     var searchList:List<ResultDatabase> = resultMappingImpl.searchList(searchItem.results)
                     Log.d("View Model@@@@@@@@@@",searchList.toString())
                     databaseImpl.databaseDao().addSearchItems(searchList)
@@ -39,8 +43,10 @@ class ItunesViewModel(application: Application) : AndroidViewModel(application) 
             }
         }
 
+        return count
 
 
     }
+
 
 }
