@@ -8,15 +8,12 @@ object ApiInstance {
 
     private const val BASE_URL = "https://itunes.apple.com"
 
-    private fun apiInstance():Retrofit{
+    fun apiInstance():Retrofit{
         return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
             .baseUrl(BASE_URL)
             .build()
     }
 
-    val searchItunesApi:SearchItunesApi by lazy {
-        apiInstance().create(SearchItunesApi::class.java)
-    }
 
 }

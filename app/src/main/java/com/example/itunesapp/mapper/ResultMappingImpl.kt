@@ -1,4 +1,4 @@
-package com.example.itunesapp.repositoryMapping
+package com.example.itunesapp.mapper
 
 
 import com.example.itunesapp.model.Result

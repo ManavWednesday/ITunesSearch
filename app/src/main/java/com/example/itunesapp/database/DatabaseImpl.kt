@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.itunesapp.model.ResultDatabase
 
-@Database(entities = [ResultDatabase::class],version = 1)
+@Database(entities = [ResultDatabase::class],version = 2)
 abstract class DatabaseImpl: RoomDatabase() {
     abstract fun databaseDao() : DatabaseDao
 
@@ -20,6 +20,7 @@ abstract class DatabaseImpl: RoomDatabase() {
                     INSTANCE = Room.databaseBuilder(context,
                         DatabaseImpl::class.java,
                         "search_items")
+                        .fallbackToDestructiveMigration()
                         .build()
                 }
             }
