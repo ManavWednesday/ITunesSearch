@@ -15,4 +15,5 @@ interface DatabaseDao {
     @Query("SELECT * FROM search_items")
     suspend fun getAll():List<ResultDatabase>
 
+
 }
