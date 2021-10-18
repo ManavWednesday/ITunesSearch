@@ -6,9 +6,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.itunesapp.R
-import com.example.itunesapp.model.ResultDatabase
+import com.example.itunesapp.model.RemoteDataModel
 
-class SearchAdapter(private val songList: ArrayList<ResultDatabase>) :RecyclerView.Adapter<SearchAdapter.ViewHolder>() {
+class SearchAdapter(private val songList: ArrayList<RemoteDataModel>) :RecyclerView.Adapter<SearchAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val songName:TextView = itemView.findViewById(R.id.songName)

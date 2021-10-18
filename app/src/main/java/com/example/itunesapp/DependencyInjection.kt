@@ -32,10 +32,7 @@ private fun getRemoteApi(): Retrofit {
 }
 val remoteApiModule  = module {
     single {
-        getRemoteApi()
-    }
-    single {
-        get<Retrofit>().create(SearchItunesApi::class.java)
+        getRemoteApi().create(SearchItunesApi::class.java)
     }
 }
 
