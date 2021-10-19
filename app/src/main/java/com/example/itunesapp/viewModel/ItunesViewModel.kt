@@ -11,9 +11,9 @@ class ItunesViewModel (private val repository: Repository): ViewModel() {
 
     var searchSongsList:MutableLiveData<ArrayList<RemoteDataModel>> = MutableLiveData()
 
-    fun search(name: CharSequence?) {
+    fun search(name: String) {
         viewModelScope.launch {
-            searchSongsList.value = repository.search(name as String)
+            searchSongsList.value = repository.search(name)
         }
     }
 }

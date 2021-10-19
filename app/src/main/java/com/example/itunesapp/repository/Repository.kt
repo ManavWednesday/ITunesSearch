@@ -10,9 +10,6 @@ class Repository(
     private val databaseImpl: DatabaseImpl,
     private val applicationContext: Context
 ) {
-//    val databaseImpl: DatabaseImpl = DatabaseImpl.getDatabase(application)
-//    private val resultMappingImpl = ResultMappingImpl()
-    private var searchedSongsList: ArrayList<RemoteDataModel> = arrayListOf()
 
 //    suspend fun searchItem(s: String) {
 //        val result = searchItunesApi.searchSongs(s)
@@ -24,14 +21,8 @@ class Repository(
 //        //Log.d("RESULT &&&& ", databaseImpl.databaseDao().getAll().toString())
 //    }
 
-    suspend fun search(name: String): ArrayList<RemoteDataModel> {
-        searchedSongsList = arrayListOf()
+    suspend fun search(name: String): ArrayList<RemoteDataModel>? {
         val apiResponse = searchItunesApi.searchSongs(name)
-        val allSongsList = apiResponse.body()?.results
-        if (allSongsList != null) {
-            for (i in 0 until allSongsList.size)
-                    searchedSongsList.add(allSongsList[i])
-        }
-        return searchedSongsList
+        return apiResponse.body()?.results
     }
 }

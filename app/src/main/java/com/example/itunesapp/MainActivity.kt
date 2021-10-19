@@ -21,10 +21,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
+        setContentView(binding.root)
 
         val viewModel:ItunesViewModel by viewModel()
+        val searchAdapter = SearchAdapter()
+        binding.recyclerView.adapter = searchAdapter
+        binding.recyclerView.layoutManager = GridLayoutManager(this,1)
 
         binding.searchEditText.addTextChangedListener(object : TextWatcher{
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -43,8 +45,8 @@ class MainActivity : AppCompatActivity() {
         })
 
         viewModel.searchSongsList.observe(this,{
-            binding.recyclerView.adapter = viewModel.searchSongsList.value?.let { it1 -> SearchAdapter(it1) }
-            binding.recyclerView.layoutManager = GridLayoutManager(this,1)
+            viewModel.searchSongsList.value?.let { it1 -> searchAdapter.updateList(it1) }
+            searchAdapter.notifyDataSetChanged()
         })
 
     }
