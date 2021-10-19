@@ -1,53 +1,50 @@
 package com.example.itunesapp
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.widget.EditText
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.itunesapp.adapter.SearchAdapter
+import com.example.itunesapp.databinding.ActivityMainBinding
 import com.example.itunesapp.viewModel.ItunesViewModel
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
-    lateinit var editText:EditText
-    lateinit var recyclerView: RecyclerView
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
         val viewModel:ItunesViewModel by viewModel()
-//        lifecycleScope.launch {
-//            viewModel.searchItem()
-//        }
 
-        editText = findViewById(R.id.searchEditText)
-        recyclerView = findViewById(R.id.recyclerView)
-
-        editText.addTextChangedListener(object : TextWatcher{
+        binding.searchEditText.addTextChangedListener(object : TextWatcher{
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
             }
 
             override fun onTextChanged(name: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                lifecycleScope.launch {
-                    viewModel.search(name.toString())
-                }
+//                val flow = flow{
+//                    emit(viewModel.search(name))
+//                    delay(2000L)
+//                }
+            viewModel.search(name.toString())
             }
 
             override fun afterTextChanged(p0: Editable?) {
-
             }
         })
 
         viewModel.searchSongsList.observe(this,{
-            recyclerView.adapter = viewModel.searchSongsList.value?.let { it1 -> SearchAdapter(it1) }
-            recyclerView.layoutManager = GridLayoutManager(this,1)
+            binding.recyclerView.adapter = viewModel.searchSongsList.value?.let { it1 -> SearchAdapter(it1) }
+            binding.recyclerView.layoutManager = GridLayoutManager(this,1)
         })
 
     }

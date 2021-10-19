@@ -1,30 +1,30 @@
 package com.example.itunesapp.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.itunesapp.R
+import com.example.itunesapp.databinding.ListItemBinding
 import com.example.itunesapp.model.RemoteDataModel
 
 class SearchAdapter(private val songList: ArrayList<RemoteDataModel>) :RecyclerView.Adapter<SearchAdapter.ViewHolder>() {
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        val songName:TextView = itemView.findViewById(R.id.songName)
-    }
+    inner class ViewHolder(val binding: ListItemBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item,parent,false)
-        return ViewHolder(view)
+        val binding = ListItemBinding
+            .inflate(LayoutInflater.from(parent.context),parent,false)
+        return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.songName.text = songList[position].collectionName
+        with(holder){
+            with(songList[position]){
+                binding.songName.text = collectionName
+            }
+        }
     }
 
     override fun getItemCount(): Int {
         return songList.size
     }
-
 }
