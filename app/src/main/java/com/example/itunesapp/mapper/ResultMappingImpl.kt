@@ -1,11 +1,11 @@
-package com.example.itunesapp.repositoryMapping
+package com.example.itunesapp.mapper
 
 
-import com.example.itunesapp.model.Result
+import com.example.itunesapp.model.RemoteDataModel
 import com.example.itunesapp.model.ResultDatabase
 
-class ResultMappingImpl:ResultMapping<Result,ResultDatabase> {
-    override suspend fun mapResults(result: Result):ResultDatabase {
+class ResultMappingImpl:ResultMapping<RemoteDataModel,ResultDatabase> {
+    override suspend fun mapResults(result: RemoteDataModel):ResultDatabase {
 
         return ResultDatabase(
         amgArtistId = result.amgArtistId,
@@ -57,7 +57,7 @@ class ResultMappingImpl:ResultMapping<Result,ResultDatabase> {
 
     }
 
-    suspend fun searchList(searchList:List<Result>): List<ResultDatabase>{
+    suspend fun searchList(searchList:List<RemoteDataModel>): List<ResultDatabase>{
         return searchList.map { mapResults(it) }
     }
 

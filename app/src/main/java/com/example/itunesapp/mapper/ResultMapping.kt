@@ -1,4 +1,4 @@
-package com.example.itunesapp.repositoryMapping
+package com.example.itunesapp.mapper
 
 
 interface ResultMapping<Result,ResultDatabase> {

@@ -1,6 +1,6 @@
 package com.example.itunesapp.model
 
-data class Result(
+data class RemoteDataModel(
     var amgArtistId: Int,
     var artistId: Int,
     var artistName: String,
