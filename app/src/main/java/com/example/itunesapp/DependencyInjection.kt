@@ -2,6 +2,7 @@ package com.example.itunesapp
 
 import android.content.Context
 import androidx.room.Room.databaseBuilder
+import com.example.itunesapp.adapter.OnClick
 import com.example.itunesapp.database.DatabaseImpl
 import com.example.itunesapp.network.SearchItunesApi
 import com.example.itunesapp.repository.Repository
@@ -46,8 +47,6 @@ val databaseModule = module {
     }
 }
 
-
-
 val repository = module {
     single {
         Repository(get(),get(),get())
@@ -55,6 +54,6 @@ val repository = module {
 }
 val viewModel = module {
     viewModel {
-        ItunesViewModel(get())
+        ItunesViewModel(get<Repository>())
     }
 }

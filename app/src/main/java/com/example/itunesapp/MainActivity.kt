@@ -22,32 +22,5 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        val viewModel:ItunesViewModel by viewModel()
-        val searchAdapter = SearchAdapter()
-        binding.recyclerView.adapter = searchAdapter
-        binding.recyclerView.layoutManager = GridLayoutManager(this,1)
-
-        binding.searchEditText.addTextChangedListener(object : TextWatcher{
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-            override fun onTextChanged(name: CharSequence?, p1: Int, p2: Int, p3: Int) {
-//                val flow = flow{
-//                    emit(viewModel.search(name))
-//                    delay(2000L)
-//                }
-            viewModel.search(name.toString())
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-            }
-        })
-
-        viewModel.searchSongsList.observe(this,{
-            viewModel.searchSongsList.value?.let { it1 -> searchAdapter.updateList(it1) }
-            searchAdapter.notifyDataSetChanged()
-        })
-
     }
 }
