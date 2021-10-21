@@ -18,5 +18,9 @@
         android:id="@+id/songDescription"
         android:name="com.example.itunesapp.ui.SongDescription"
         android:label="fragment_song_description"
-        tools:layout="@layout/fragment_song_description" />
+        tools:layout="@layout/fragment_song_description" >
+        <argument
+            android:name="songName"
+            app:argType="string" />
+    </fragment>
 </navigation>

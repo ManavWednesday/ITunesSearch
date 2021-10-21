@@ -1,28 +1,30 @@
 package com.example.itunesapp.repository
 
-import android.content.Context
-import com.example.itunesapp.database.DatabaseImpl
+import android.util.Log
+import com.example.itunesapp.database.SongDescriptionImpl
 import com.example.itunesapp.model.RemoteDataModel
+import com.example.itunesapp.model.RemoteSongDescription
 import com.example.itunesapp.network.SearchItunesApi
 
 class Repository(
     private val searchItunesApi: SearchItunesApi,
-    private val databaseImpl: DatabaseImpl,
-    private val applicationContext: Context
+    private val songDescriptionDatabase: SongDescriptionImpl
 ) {
-
-//    suspend fun searchItem(s: String) {
-//        val result = searchItunesApi.searchSongs(s)
-//        Log.d("888888888",result.body().toString())
-//        val searchList: List<ResultDatabase> = resultMappingImpl.searchList(result.body()?.results!!)
-//        Log.d("View Model@@@@@@@@@@", searchList.toString())
-//        //databaseImpl.databaseDao().nukeTable()
-//        //databaseImpl.databaseDao().addSearchItems(searchList)
-//        //Log.d("RESULT &&&& ", databaseImpl.databaseDao().getAll().toString())
-//    }
-
     suspend fun search(name: String): ArrayList<RemoteDataModel>? {
         val apiResponse = searchItunesApi.searchSongs(name)
         return apiResponse.body()?.results
+    }
+
+    suspend fun searchSongDescription(trackId:Int,kind:String):ArrayList<RemoteSongDescription>?{
+        return if (songDescriptionDatabase.songDescriptionDao().checkSong(trackId)){
+            Log.d("Database has song!!!!!!",arrayListOf(songDescriptionDatabase.songDescriptionDao().getSongDescription(trackId)).toString())
+            arrayListOf(songDescriptionDatabase.songDescriptionDao().getSongDescription(trackId))
+        } else{
+            val apiResponse = searchItunesApi.getTrackData(trackId,kind)
+            apiResponse.body()?.let { songDescriptionDatabase.songDescriptionDao().addSong(it.results) }
+            Log.d("Database@@@@@",songDescriptionDatabase.songDescriptionDao().getAll().toString())
+            Log.d("Repository@@@@@@",apiResponse.body()?.results.toString())
+            apiResponse.body()?.results
+        }
     }
 }

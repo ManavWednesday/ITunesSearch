@@ -5,27 +5,39 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.itunesapp.model.RemoteDataModel
+import com.example.itunesapp.model.RemoteSongDescription
 import com.example.itunesapp.repository.Repository
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
+@FlowPreview
 class ItunesViewModel (private val repository: Repository): ViewModel() {
 
     var searchSongsList:MutableLiveData<ArrayList<RemoteDataModel>> = MutableLiveData()
-    lateinit var mRemoteDataModel:RemoteDataModel
+    var searchSongDescription:MutableLiveData<ArrayList<RemoteSongDescription>> = MutableLiveData()
+    private val mutableStateFlow:MutableStateFlow<String> = MutableStateFlow("")
 
-    fun shareSong(remoteDataModel: RemoteDataModel){
-        mRemoteDataModel = remoteDataModel
-        Log.d("@@@@@@@@@@@@@@@@@",mRemoteDataModel.toString())
+    init {
+        viewModelScope.launch {
+             mutableStateFlow
+                 .map { it.trim() }
+                 .debounce(300)
+                 .collect {
+                 if (it.isNotBlank()){
+                     searchSongsList.value = repository.search(it)
+                 }
+             }
+        }
+    }
+    fun search(name: String) {
+        mutableStateFlow.value = name
     }
 
-    fun search(name: String) {
+    fun searchSongDescription(trackId:Int,kind:String){
         viewModelScope.launch {
-            searchSongsList.value = repository.search(name)
+            searchSongDescription.value = repository.searchSongDescription(trackId,kind)
+            Log.d("viewModel###",searchSongDescription.value.toString())
         }
     }
 

@@ -3,49 +3,49 @@ package com.example.itunesapp.ui
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.itunesapp.R
 import com.example.itunesapp.adapter.OnClick
 import com.example.itunesapp.adapter.SearchAdapter
 import com.example.itunesapp.databinding.FragmentSearchSongBinding
-import com.example.itunesapp.model.RemoteDataModel
 import com.example.itunesapp.viewModel.ItunesViewModel
-import org.koin.androidx.viewmodel.ext.android.getViewModel
+import kotlinx.coroutines.FlowPreview
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 
 class SearchSong : Fragment(),OnClick {
     private var _binding: FragmentSearchSongBinding? = null
     private val binding get() = _binding!!
+    @FlowPreview
     private val viewModel: ItunesViewModel by sharedViewModel()
     private val searchAdapter = SearchAdapter(this)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         _binding = FragmentSearchSongBinding.inflate(inflater,container,false)
         return binding.root
     }
 
+    @FlowPreview
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         textWatcher(binding)
         initializeAdapter(binding)
-        liveDataObserver(binding)
+        liveDataObserver()
 
     }
 
-    private fun liveDataObserver(binding: FragmentSearchSongBinding) = with(binding) {
+    @FlowPreview
+    private fun liveDataObserver() {
         viewModel.searchSongsList.observe(viewLifecycleOwner,{
             viewModel.searchSongsList.value?.let { it1 -> searchAdapter.updateList(it1) }
             searchAdapter.notifyDataSetChanged()
@@ -57,6 +57,7 @@ class SearchSong : Fragment(),OnClick {
         recyclerView.layoutManager = GridLayoutManager(context,1)
     }
 
+    @FlowPreview
     private fun textWatcher(binding: FragmentSearchSongBinding) = with(binding) {
 
         searchEditText.addTextChangedListener(object : TextWatcher {
@@ -65,18 +66,15 @@ class SearchSong : Fragment(),OnClick {
 
             override fun onTextChanged(name: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 viewModel.search(name.toString())
-                //viewModel.xyz(name.toString()).debounce(1000)
             }
-
             override fun afterTextChanged(p0: Editable?) {
             }
         })
-
     }
 
-    override fun onViewClick(remoteDataModel: RemoteDataModel) {
-        Log.d("@@@@@@@@@@",remoteDataModel.toString())
-        viewModel.shareSong(remoteDataModel)
+    @FlowPreview
+    override fun songDescription(trackId: Int, kind: String) {
+        viewModel.searchSongDescription(trackId,kind)
         findNavController().navigate(R.id.action_searchSong_to_songDescription)
     }
 }

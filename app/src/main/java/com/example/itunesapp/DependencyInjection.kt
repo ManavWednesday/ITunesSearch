@@ -2,11 +2,11 @@ package com.example.itunesapp
 
 import android.content.Context
 import androidx.room.Room.databaseBuilder
-import com.example.itunesapp.adapter.OnClick
-import com.example.itunesapp.database.DatabaseImpl
+import com.example.itunesapp.database.SongDescriptionImpl
 import com.example.itunesapp.network.SearchItunesApi
 import com.example.itunesapp.repository.Repository
 import com.example.itunesapp.viewModel.ItunesViewModel
+import kotlinx.coroutines.FlowPreview
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -15,11 +15,12 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 
-private fun getDatabase(context: Context): DatabaseImpl {
+
+private fun getSongDescriptionDatabase(context: Context): SongDescriptionImpl {
     return databaseBuilder(
         context,
-        DatabaseImpl::class.java,
-        "search_items")
+        SongDescriptionImpl::class.java,
+        "song_description")
         .fallbackToDestructiveMigration()
         .build()
 }
@@ -43,17 +44,18 @@ val remoteApiModule  = module {
 
 val databaseModule = module {
     single {
-        getDatabase(get())
+        getSongDescriptionDatabase(get())
     }
 }
 
 val repository = module {
     single {
-        Repository(get(),get(),get())
+        Repository(get(), get())
     }
 }
+@FlowPreview
 val viewModel = module {
     viewModel {
-        ItunesViewModel(get<Repository>())
+        ItunesViewModel(get())
     }
 }

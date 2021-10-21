@@ -1,5 +1,6 @@
 package com.example.itunesapp.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -23,7 +24,8 @@ class SearchAdapter(private val onClick: OnClick) :RecyclerView.Adapter<SearchAd
         val viewHolder = ViewHolder(binding)
 
         binding.listItem.setOnClickListener {
-            onClick.onViewClick(songList[viewHolder.adapterPosition])
+            Log.d("###",songList[viewHolder.adapterPosition].trackId.toString())
+            onClick.songDescription(songList[viewHolder.adapterPosition].trackId,songList[viewHolder.adapterPosition].kind)
         }
 
         return viewHolder
