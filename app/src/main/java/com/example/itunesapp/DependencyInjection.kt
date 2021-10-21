@@ -2,6 +2,7 @@ package com.example.itunesapp
 
 import android.content.Context
 import androidx.room.Room.databaseBuilder
+import com.example.itunesapp.database.SongDescriptionDao
 import com.example.itunesapp.database.SongDescriptionImpl
 import com.example.itunesapp.network.SearchItunesApi
 import com.example.itunesapp.repository.Repository
@@ -44,7 +45,7 @@ val remoteApiModule  = module {
 
 val databaseModule = module {
     single {
-        getSongDescriptionDatabase(get())
+        getSongDescriptionDatabase(get()).songDescriptionDao()
     }
 }
 
