@@ -26,7 +26,7 @@ private fun getSongDescriptionDatabase(context: Context): SongDescriptionImpl {
         .build()
 }
 
-private const val BASE_URL = "https://itunes.apple.com"
+const val BASE_URL = "https://itunes.apple.com"
 private fun getRemoteApi(): Retrofit {
     return Retrofit.Builder()
         .addConverterFactory(GsonConverterFactory.create())

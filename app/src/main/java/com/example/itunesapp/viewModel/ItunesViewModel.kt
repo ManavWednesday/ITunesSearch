@@ -7,12 +7,13 @@ import androidx.lifecycle.viewModelScope
 import com.example.itunesapp.model.RemoteDataModel
 import com.example.itunesapp.model.RemoteSongDescription
 import com.example.itunesapp.repository.Repository
+import com.example.itunesapp.repository.RepositoryInter
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 @FlowPreview
-class ItunesViewModel (private val repository: Repository): ViewModel() {
+class ItunesViewModel (private val repository: RepositoryInter): ViewModel() {
 
     var searchSongsList:MutableLiveData<ArrayList<RemoteDataModel>> = MutableLiveData()
     var searchSongDescription:MutableLiveData<ArrayList<RemoteSongDescription>> = MutableLiveData()
@@ -22,7 +23,7 @@ class ItunesViewModel (private val repository: Repository): ViewModel() {
         viewModelScope.launch {
              mutableStateFlow
                  .map { it.trim() }
-                 .debounce(300)
+                 .debounce(1000)
                  .collect {
                  if (it.isNotBlank()){
                      searchSongsList.value = repository.search(it)

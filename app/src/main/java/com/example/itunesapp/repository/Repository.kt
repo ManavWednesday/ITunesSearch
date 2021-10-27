@@ -9,13 +9,14 @@ import com.example.itunesapp.network.SearchItunesApi
 class Repository(
     private val searchItunesApi: SearchItunesApi,
     private val songDescriptionDao:SongDescriptionDao
-) {
-    suspend fun search(name: String): ArrayList<RemoteDataModel>? {
+) : RepositoryInter {
+
+    override suspend fun search(name: String): ArrayList<RemoteDataModel>? {
         val apiResponse = searchItunesApi.searchSongs(name)
         return apiResponse.body()?.results
     }
-
-    suspend fun searchSongDescription(trackId:Int,kind:String):ArrayList<RemoteSongDescription>?{
+    
+    override suspend fun searchSongDescription(trackId:Int,kind:String):ArrayList<RemoteSongDescription>?{
         return if (songDescriptionDao.checkSong(trackId)){
             Log.d("Database has song!!!!!!",arrayListOf(songDescriptionDao.getSongDescription(trackId)).toString())
             arrayListOf(songDescriptionDao.getSongDescription(trackId))
