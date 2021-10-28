@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/itunes_navigation"
+    app:startDestination="@id/searchSong">
+
+    <fragment
+        android:id="@+id/searchSong"
+        android:name="com.example.itunesapp.ui.SearchSong"
+        android:label="fragment_search_song"
+        tools:layout="@layout/fragment_search_song" >
+        <action
+            android:id="@+id/action_searchSong_to_songDescription"
+            app:destination="@id/songDescription" />
+    </fragment>
+    <fragment
+        android:id="@+id/songDescription"
+        android:name="com.example.itunesapp.ui.SongDescription"
+        android:label="fragment_song_description"
+        tools:layout="@layout/fragment_song_description" >
+        <argument
+            android:name="songName"
+            app:argType="string" />
+    </fragment>
+</navigation>
