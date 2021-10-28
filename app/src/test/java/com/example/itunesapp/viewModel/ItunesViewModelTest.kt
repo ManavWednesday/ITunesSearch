@@ -14,20 +14,21 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.junit.MockitoJUnitRunner
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.times
+import org.mockito.kotlin.whenever
 
 @ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
 class ItunesViewModelTest {
 
     @FlowPreview
-    @Mock
     private lateinit var viewModel: ItunesViewModel
 
-    @Mock
-    private val fakeRepo: FakeRepo = FakeRepo()
+
+    private lateinit var  fakeRepo: FakeRepo
 
     private lateinit var testCoroutineDispatcher:TestCoroutineDispatcher
 
@@ -38,9 +39,9 @@ class ItunesViewModelTest {
     @FlowPreview
     @Before
     fun onSetup(){
+        fakeRepo = mock()
         testCoroutineDispatcher = TestCoroutineDispatcher()
         Dispatchers.setMain(mainThreadSurrogate)
-
         viewModel = ItunesViewModel(fakeRepo)
     }
 
@@ -67,10 +68,15 @@ class ItunesViewModelTest {
     @FlowPreview
     @Test
     fun `when name is passed the list should contain values`() = testCoroutineDispatcher.runBlockingTest{
-        Mockito.`when`(fakeRepo.search("Thunder")).thenReturn(arrayListOf(RemoteDataModel()))
+        //whenever(fakeRepo.search("Thunder")).thenReturn(arrayListOf(RemoteDataModel()))
+        //Mockito.`when`(fakeRepo.search("Thunder")).thenReturn(arrayListOf(RemoteDataModel()))
         viewModel.search("Thunder")
+
         viewModel.searchSongsList.observeForever {
             assertEquals(viewModel.searchSongsList.value, arrayListOf(RemoteDataModel()))
+            runBlockingTest {
+                Mockito.verify(fakeRepo, times(1)).search("Thunder")
+            }
         }
     }
 

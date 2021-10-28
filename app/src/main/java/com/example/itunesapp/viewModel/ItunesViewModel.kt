@@ -8,6 +8,7 @@ import com.example.itunesapp.model.RemoteDataModel
 import com.example.itunesapp.model.RemoteSongDescription
 import com.example.itunesapp.repository.Repository
 import com.example.itunesapp.repository.RepositoryInter
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -20,7 +21,7 @@ class ItunesViewModel (private val repository: RepositoryInter): ViewModel() {
     private val mutableStateFlow:MutableStateFlow<String> = MutableStateFlow("")
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.Main) {
              mutableStateFlow
                  .map { it.trim() }
                  .debounce(1000)

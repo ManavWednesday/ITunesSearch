@@ -1,2 +1,4 @@
 rootProject.name = "ITunes App"
 include ':app'
+
+//file:///home/runner/work/ITunesSearch/ITunesSearch/app/build/reports/tests/testDebugUnitTest/index.html
